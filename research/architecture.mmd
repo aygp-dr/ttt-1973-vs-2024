@@ -1,0 +1,144 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a1a2e', 'primaryTextColor': '#eee', 'primaryBorderColor': '#16213e', 'lineColor': '#e94560', 'secondaryColor': '#0f3460', 'tertiaryColor': '#533483'}}}%%
+
+%% Unix V4 TTT Architecture - Reconstructed from Binary Analysis
+
+graph TB
+    subgraph MAIN["main() - Entry Point"]
+        INIT[Initialize]
+        PROMPT["Print 'Tic-Tac-Toe'"]
+        ASK_KNOW["Accumulated knowledge?"]
+    end
+
+    subgraph KNOWLEDGE["Knowledge System"]
+        LOAD["load_knowledge()"]
+        SAVE["save_knowledge()"]
+        LOOKUP["lookup_weight()"]
+        UPDATE["update_knowledge()"]
+        KFILE[("ttt.k<br/>268 bytes")]
+    end
+
+    subgraph GAME["Game Loop"]
+        NEWGAME["new game"]
+        DISPLAY["display_board()"]
+        HUMAN_TURN["Get human move"]
+        VALIDATE["Validate move"]
+        COMP_TURN["compute_move()"]
+        CHECK["check_winner()"]
+    end
+
+    subgraph OUTCOMES["Game Outcomes"]
+        WIN["You win"]
+        LOSE["I win"]
+        DRAW["Draw"]
+        CONCEDE["I concede"]
+    end
+
+    INIT --> PROMPT --> ASK_KNOW
+    ASK_KNOW -->|"y"| LOAD
+    ASK_KNOW -->|"n"| NEWGAME
+    LOAD --> KFILE
+    KFILE --> LOAD
+    LOAD --> NEWGAME
+
+    NEWGAME --> DISPLAY --> HUMAN_TURN
+    HUMAN_TURN --> VALIDATE
+    VALIDATE -->|"Invalid"| HUMAN_TURN
+    VALIDATE -->|"Valid"| CHECK
+    CHECK -->|"Human wins"| WIN
+    CHECK -->|"Continue"| COMP_TURN
+    COMP_TURN --> LOOKUP
+    LOOKUP --> COMP_TURN
+    COMP_TURN -->|"No move"| CONCEDE
+    COMP_TURN -->|"Move found"| CHECK
+    CHECK -->|"Computer wins"| LOSE
+    CHECK -->|"Board full"| DRAW
+    CHECK -->|"Continue"| DISPLAY
+
+    WIN --> UPDATE
+    LOSE --> UPDATE
+    DRAW --> UPDATE
+    CONCEDE --> UPDATE
+
+    UPDATE --> SAVE
+    SAVE --> KFILE
+    SAVE --> NEWGAME
+
+---
+
+%% Learning Algorithm Flow
+
+graph LR
+    subgraph MENACE_STYLE["MENACE-Style Learning"]
+        direction TB
+        GAME_END[Game Ends]
+        OUTCOME{Outcome?}
+        WIN_ADJ["+3 to all positions"]
+        DRAW_ADJ["+1 to all positions"]
+        LOSE_ADJ["-2 to all positions"]
+        REPLAY["Replay game moves"]
+        UPDATE_W["Update weights"]
+        SAVE_K["Save to ttt.k"]
+    end
+
+    GAME_END --> OUTCOME
+    OUTCOME -->|"Computer Win"| WIN_ADJ
+    OUTCOME -->|"Draw"| DRAW_ADJ
+    OUTCOME -->|"Human Win"| LOSE_ADJ
+
+    WIN_ADJ --> REPLAY
+    DRAW_ADJ --> REPLAY
+    LOSE_ADJ --> REPLAY
+
+    REPLAY --> UPDATE_W --> SAVE_K
+
+---
+
+%% Board Encoding
+
+graph LR
+    subgraph ENCODING["Board State Encoding"]
+        BOARD["9 cells<br/>3 states each"]
+        CALC["Σ cell[i] × 3^i"]
+        CODE["16-bit value<br/>(0-19682)"]
+    end
+
+    BOARD --> CALC --> CODE
+
+    subgraph EXAMPLE["Example: X.O|.X.|O.."]
+        E1["1,0,2,0,1,0,2,0,0"]
+        E2["= 1×1 + 0×3 + 2×9 + ..."]
+        E3["= 15714 (0x3d62)"]
+    end
+
+---
+
+%% Comparison with MENACE
+
+graph TB
+    subgraph MENACE["MENACE (1961)"]
+        M_BOX[304 Matchboxes]
+        M_BEAD[Colored Beads]
+        M_DRAW[Random Draw]
+        M_ADD[Add/Remove Beads]
+    end
+
+    subgraph TTT["Unix V4 TTT (1973)"]
+        T_ARRAY[Knowledge Array]
+        T_WEIGHT[Signed Weights]
+        T_MAX[Select Max Weight]
+        T_UPDATE[Adjust Weights]
+    end
+
+    subgraph COMMON["Shared Principles"]
+        C_RL[Reinforcement Learning]
+        C_STATE[State → Value Mapping]
+        C_IMPROVE[Learn from Experience]
+    end
+
+    M_BOX -.->|"Digital equivalent"| T_ARRAY
+    M_BEAD -.->|"Digital equivalent"| T_WEIGHT
+    M_DRAW -.->|"Deterministic"| T_MAX
+    M_ADD -.->|"Same concept"| T_UPDATE
+
+    MENACE --> COMMON
+    TTT --> COMMON

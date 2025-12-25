@@ -113,9 +113,11 @@ interestingness mattered.
 
 ## References
 
-- [Unix V4 Games Analysis](https://github.com/aygp-dr/unix-v4)
+- [**Internet Archive: Utah Unix V4 Tape**](https://archive.org/details/utah_unix_v4_raw) — Primary source (Computer History Museum)
+- [Unix V4 Games Analysis](https://github.com/aygp-dr/unix-v4) — Full Unix V4 filesystem
+- [squoze.net Unix V4](http://squoze.net/UNIX/v4/) — Bootable disk images
 - Newell, A. & Simon, H. (1972). Human Problem Solving
-- [MENACE](https://en.wikipedia.org/wiki/MENACE) - Michie's 1961 matchbox learning machine
+- [MENACE](https://en.wikipedia.org/wiki/MENACE) — Michie's 1961 matchbox learning machine
 
 ## License
 

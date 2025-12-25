@@ -213,7 +213,8 @@ if __name__ == "__main__":
     print(f"Minimax result from empty board: {result}")
     print(f"  (0 = draw, +1 = X wins, -1 = O wins)")
 
-    print(f"\nPositions in cache: {len(minimax.cache_info()._asdict()['currsize']) if hasattr(minimax, 'cache_info') else 'N/A'}")
+    cache_info = minimax.cache_info()
+    print(f"\nPositions in cache: {cache_info.currsize}")
 
     print("\n" + "="*50)
     print("Comparison with Unix V4 (1973):")
